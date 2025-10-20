@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="id">
+	<head>
+		<meta charset="UTF-8" />
+		<title>Dashboard</title>
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+		/>
+		<style>
+			body {
+				background: linear-gradient(135deg, #4e342e, #a1887f);
+				height: 100vh;
+				display: flex;
+				flex-direction: column;
+				font-family: "Poppins", sans-serif;
+				color: #3e2723;
+			}
+
+			.navbar {
+				background: rgba(78, 52, 46, 0.95);
+				box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+			}
+
+			.navbar-brand {
+				font-weight: 700;
+				font-size: 1.4rem;
+				color: #f8ede3 !important;
+			}
+
+			.btn-logout {
+				background: #d84315;
+				border: none;
+				color: #fff;
+				transition: 0.3s;
+			}
+
+			.btn-logout:hover {
+				background: #b71c1c;
+			}
+
+			.dashboard-container {
+				flex: 1;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				padding: 2rem;
+			}
+
+			.dashboard-header {
+				text-align: center;
+				margin-bottom: 2rem;
+			}
+
+			.dashboard-header h1 {
+				color: #fffaf5;
+				font-weight: 700;
+			}
+
+			.dashboard-header p {
+				color: #ffe0b2;
+			}
+
+			.card-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+				gap: 1.5rem;
+				width: 100%;
+				max-width: 900px;
+			}
+
+			.dashboard-card {
+				background: #fffaf5;
+				border-radius: 18px;
+				padding: 1.8rem 1.2rem;
+				text-align: center;
+				box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+				transition: all 0.3s ease;
+				position: relative;
+				overflow: hidden;
+			}
+
+			.dashboard-card::before {
+				content: "";
+				position: absolute;
+				inset: 0;
+				background: linear-gradient(
+					135deg,
+					rgba(255, 224, 178, 0.4),
+					rgba(255, 204, 128, 0.15)
+				);
+				opacity: 0;
+				transition: 0.3s;
+			}
+
+			.dashboard-card:hover::before {
+				opacity: 1;
+			}
+
+			.dashboard-card:hover {
+				transform: translateY(-6px);
+				box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+			}
+
+			.icon-wrapper {
+				width: 70px;
+				height: 70px;
+				border-radius: 50%;
+				margin: 0 auto 1rem;
+				background: linear-gradient(135deg, #ffe0b2, #ffcc80);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+			}
+
+			.icon {
+				font-size: 2rem;
+				color: #6f4e37;
+			}
+
+			.dashboard-card h5 {
+				color: #6f4e37;
+				font-weight: 600;
+				margin-bottom: 0.5rem;
+			}
+
+			.dashboard-card .desc {
+				color: #8d6e63;
+				font-size: 0.9rem;
+				margin-bottom: 0;
+			}
+		</style>
+	</head>
+	<body>
+		<nav class="navbar navbar-expand-lg navbar-dark px-4">
+			<div class="container-fluid">
+				<a class="navbar-brand" href="#">🍽️ Restoran Nusantara</a>
+				<div class="d-flex align-items-center">
+					<span id="username" class="text-light fw-semibold me-3"></span>
+					<button onclick="logout()" class="btn btn-logout btn-sm">
+						Logout
+					</button>
+				</div>
+			</div>
+		</nav>
+
+		<div class="dashboard-container">
+			<div class="dashboard-header">
+				<h1>Selamat Datang di Dashboard</h1>
+				<p>Kelola data restoran Anda dengan mudah dan cepat</p>
+			</div>
+
+			<div class="card-grid">
+				<a href="menu.html" class="dashboard-card">
+					<div class="icon-wrapper">
+						<div class="icon">🍛</div>
+					</div>
+					<h5>Data Menu</h5>
+					<p class="desc">Kelola daftar menu makanan & minuman.</p>
+				</a>
+
+				<a href="bahan.html" class="dashboard-card">
+					<div class="icon-wrapper">
+						<div class="icon">🥦</div>
+					</div>
+					<h5>Data Bahan</h5>
+					<p class="desc">Kelola stok bahan makanan dan kebutuhan dapur.</p>
+				</a>
+
+				<a href="pelanggan.html" class="dashboard-card">
+					<div class="icon-wrapper">
+						<div class="icon">👥</div>
+					</div>
+					<h5>Data Pelanggan</h5>
+					<p class="desc">Lihat informasi pelanggan dan histori transaksi.</p>
+				</a>
+
+				<a href="pembelian.html" class="dashboard-card">
+					<div class="icon-wrapper">
+						<div class="icon">🧾</div>
+					</div>
+					<h5>Data Pembelian</h5>
+					<p class="desc">Pantau transaksi pembelian dan laporan penjualan.</p>
+				</a>
+			</div>
+		</div>
+
+		<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+		<script src="firebase-config.js"></script>
+
+		<script>
+			auth.onAuthStateChanged((user) => {
+				if (!user) {
+					window.location.href = "login.html";
+				} else {
+					db.ref("users/" + user.uid)
+						.once("value")
+						.then((snapshot) => {
+							if (snapshot.exists()) {
+								const data = snapshot.val();
+								document.getElementById("username").innerText =
+									"Hi, " + data.nama;
+							}
+						});
+				}
+			});
+
+			function logout() {
+				auth.signOut().then(() => {
+					window.location.href = "login.html";
+				});
+			}
+		</script>
+	</body>
+</html>

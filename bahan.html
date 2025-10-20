@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Restoran Nusantara - Data Bahan</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background: linear-gradient(135deg, #fff8f0, #f3e5dc);
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .navbar {
+      background: rgba(78, 52, 46, 0.95);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    .navbar-brand {
+      font-weight: 700;
+      font-size: 1.4rem;
+      color: #f8ede3 !important;
+    }
+    .card {
+      border-radius: 14px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+    h1 {
+      color: #5c3b15;
+      font-weight: 700;
+    }
+    .btn-custom {
+      background-color: #8b4513;
+      color: #fff;
+      border-radius: 8px;
+    }
+    .btn-custom:hover {
+      background-color: #a86224;
+      color: #fff;
+    }
+    .table thead {
+      background-color: #8b4513;
+      color: #fff;
+    }
+    footer {
+      margin-top: 40px;
+      text-align: center;
+      color: #777;
+      font-size: 14px;
+      padding: 10px 0;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg shadow">
+    <div class="container-fluid px-4">
+      <a class="navbar-brand" href="index.html">🍽️ Restoran Nusantara</a>
+      <div class="ms-auto">
+        <a href="menu.html" class="btn btn-outline-light btn-sm me-2">Menu</a>
+        <a href="bahan.html" class="btn btn-outline-light btn-sm me-2 active">Bahan</a>
+        <a href="pelanggan.html" class="btn btn-outline-light btn-sm me-2">Pelanggan</a>
+        <a href="pembelian.html" class="btn btn-outline-light btn-sm me-2">Pembelian</a>
+        <button onclick="logout()" class="btn btn-danger btn-sm">Logout</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container my-5">
+    <div class="card p-4">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>🧂 Data Bahan Dapur</h1>
+        <button data-bs-toggle="modal" data-bs-target="#bahanModal" class="btn btn-success" onclick="resetForm()">
+          Tambah Bahan
+        </button>
+      </div>
+
+      <table class="table table-bordered table-hover text-center align-middle">
+        <thead>
+          <tr>
+            <th>Nama Bahan</th>
+            <th>Kategori</th>
+            <th>Satuan</th>
+            <th>Stok</th>
+            <th>Harga per Satuan (Rp)</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="bahanList"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="modal fade" id="bahanModal" tabindex="-1" aria-labelledby="bahanModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content p-3">
+        <div class="modal-header">
+          <h5 class="modal-title" id="bahanModalLabel">Tambah Bahan Baru</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <form id="bahanForm">
+          <div class="modal-body">
+            <input type="hidden" id="bahanId" />
+
+            <div class="mb-3">
+              <label class="form-label">Nama Bahan</label>
+              <input type="text" id="namaBahan" class="form-control" required />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Kategori</label>
+              <select id="kategoriBahan" class="form-select">
+                <option value="Bumbu">Bumbu</option>
+                <option value="Sayuran">Sayuran</option>
+                <option value="Daging">Daging</option>
+                <option value="Lainnya">Lainnya</option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Satuan</label>
+              <select id="satuanBahan" class="form-select">
+                <option value="Kg">Kg</option>
+                <option value="Gram">Gram</option>
+                <option value="Liter">Liter</option>
+                <option value="Pcs">Pcs</option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Stok</label>
+              <input type="number" id="stokBahan" class="form-control" min="0" value="0" />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Harga per Satuan (Rp)</label>
+              <input type="number" id="hargaBahan" class="form-control" min="0" value="0" />
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-custom w-100">Simpan</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="firebase-config.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script src="bahan.js"></script>
+
+  <script>
+    auth.onAuthStateChanged((user) => {
+      if (!user) {
+        window.location.href = "login.html";
+      }
+    });
+
+    function logout() {
+      auth.signOut().then(() => {
+        window.location.href = "login.html";
+      });
+    }
+  </script>
+</body>
+</html>
